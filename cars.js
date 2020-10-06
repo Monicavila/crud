@@ -1,4 +1,4 @@
-const car = [
+const cars = [
     {
         id: 1,
         brand: 'Toyota',
@@ -22,7 +22,7 @@ const car = [
         email: 'blue',
         year: '2020',
         price: '327900'
-    }
+    },
 ]
 
-export default car;
+export default cars;

@@ -1,20 +1,23 @@
-import car from './cars.js';
+import cars from './cars.js';
 
-    function printCars () {
-        const preList = document.getElementById('prelist');
-        preList.innerHTML = '';
-        car.forEach((cars) => {
-            const row = `<tr>
-                            <td>${cars.id}</td>
-                            <td>${cars.brand}</td>
-                            <td>${cars.model}</td>
-                            <td>${cars.color}</td>
-                            <td>${cars.year}</td>
-                            <td>${cars.price}</td>
-                        </tr>`;
-            preList.innerHTML += row;
-        })
-    }
+const preList = document.getElementById('pre-list');
+
+function printCars () {
+    
+    preList.innerHTML = ''
+    cars.forEach((car) => {
+        let row = `<tr>
+                        <th>${car.id}</th>
+                        <th>${car.brand}</th>
+                        <th>${car.model}</th>
+                        <th>${car.color}</th>
+                        <th>${car.year}</th>
+                        <th>${car.price}</th>
+                    </tr>`;
+        preList.innerHTML += row;
+    })
+}
+printCars();
 window.printCars = printCars;
 
 window.onload = function () {
