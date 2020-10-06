@@ -1,24 +1,41 @@
-window.onload = function () {
+import car from './cars.js';
 
     function printCars () {
-
+        const preList = document.getElementById('prelist');
+        preList.innerHTML = '';
+        car.forEach((cars) => {
+            const row = `<tr>
+                            <td>${cars.id}</td>
+                            <td>${cars.brand}</td>
+                            <td>${cars.model}</td>
+                            <td>${cars.color}</td>
+                            <td>${cars.year}</td>
+                            <td>${cars.price}</td>
+                        </tr>`;
+            preList.innerHTML += row;
+        })
     }
+window.printCars = printCars;
+
+window.onload = function () {
     
     var localStorageKeyBrand = 'data';
 
     loadFromLocalStorage();
 
-    document.querySelector("#btn-add").addEventListener('click', function () {
-        var brand = document.getElementById("brand"),
-            model = document.getElementById("model"),
-            color = document.getElementById("color"),
-            year = document.getElementById("year"),
-            price = document.getElementById("price");
+    document.querySelector('#btn-add').addEventListener('click', function () {
+        var id = document.getElementById('id'),
+            brand = document.getElementById('brand'),
+            model = document.getElementById('model'),
+            color = document.getElementById('color'),
+            year = document.getElementById('year'),
+            price = document.getElementById('price');
 
         // Validate
-        if (brand.value.length === 0 || model.value.length === 0 || color.value.length === 0 || year.value.length === 0 || !parseInt(price.value)) return;
+        if (id.value.length === 0 || brand.value.length === 0 || model.value.length === 0 || color.value.length === 0 || year.value.length === 0 || !parseInt(price.value)) return;
 
         var car = {
+            id: id.value,
             brand: brand.value,
             model: model.value,
             color: color.value,
@@ -27,6 +44,7 @@ window.onload = function () {
         };
 
         // Clean data
+        id.value ='';
         brand.value = '';
         model.value = '';
         color.value = '';
@@ -55,7 +73,7 @@ window.onload = function () {
     function loadFromLocalStorage() {
         var cars = [],
             dataInLocalStorage = localStorage.getItem(localStorageKeyBrand),
-            gridBody = document.querySelector("#grid tbody");
+            gridBody = document.querySelector('#grid tbody');
 
         if (dataInLocalStorage !== null) {
             cars = JSON.parse(dataInLocalStorage);
@@ -65,37 +83,23 @@ window.onload = function () {
         gridBody.innerHTML = '';
 
         cars.forEach(function (x, i) {
-            var tr = document.createElement("tr"),
-                tdId = document.createElement("td"),
-                tdBrand = document.createElement("td"),
-                tdModel = document.createElement("td"),
-                tdColor = document.createElement("td"),
-                tdYear = document.createElement("td"),
-                tdPrice = document.createElement("td"),
-                tdRemove = document.createElement("td"),
-                btnRemove = document.createElement("button");
+            var tr = document.createElement('tr'),
+                tdId = document.createElement('td'),
+                tdBrand = document.createElement('td'),
+                tdModel = document.createElement('td'),
+                tdColor = document.createElement('td'),
+                tdYear = document.createElement('td'),
+                tdPrice = document.createElement('td'),
+                tdRemove = document.createElement('td'),
+                btnRemove = document.createElement('button');
             
             const formatterDolar = new Intl.NumberFormat('en-US', {
                 style: 'currency',
                 currency: 'USD'
             })
 
-            function idCars () {
-                const brand = document.getElementById('brand').value;
-                let lastId = 0;
-                if(cars.length) {
-                    lastId = cars[cars.length - 1].id
-                }
-                const newCar = {
-                    id: lastID + 1,
-                    brand
-                }
-                cars.push(newCar);
-                printUser();
-                localStorage.setItem('cars', JSON.stringify(cars));
-            }
 
-            tdId.innerHTML = 
+            tdId.innerHTML = x.id;
             tdBrand.innerHTML = x.brand;
             tdModel.innerHTML = x.model;
             tdColor.innerHTML = x.color;
@@ -112,6 +116,7 @@ window.onload = function () {
 
             tdRemove.appendChild(btnRemove);
 
+            tr.appendChild(tdId);
             tr.appendChild(tdBrand);
             tr.appendChild(tdModel);
             tr.appendChild(tdColor);
@@ -136,4 +141,3 @@ window.onload = function () {
         loadFromLocalStorage();
     }
 }
-printCars();
