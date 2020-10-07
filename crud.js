@@ -1,13 +1,14 @@
 import cars from './cars.js';
 
-const preList = document.getElementById('pre-list');
+
+const loadCar = {}
 
 function printCars () {
-    
-    preList.innerHTML = ''
-    cars.forEach((car) => {
+    const preList = document.getElementById('pre-list');
+    preList.innerHTML = '';
+
+    cars.forEach( car => {
         let row = `<tr>
-                        <th>${car.id}</th>
                         <th>${car.brand}</th>
                         <th>${car.model}</th>
                         <th>${car.color}</th>
@@ -18,7 +19,6 @@ function printCars () {
     })
 }
 printCars();
-window.printCars = printCars;
 
 window.onload = function () {
     
@@ -27,18 +27,16 @@ window.onload = function () {
     loadFromLocalStorage();
 
     document.querySelector('#btn-add').addEventListener('click', function () {
-        var id = document.getElementById('id'),
-            brand = document.getElementById('brand'),
+        var brand = document.getElementById('brand'),
             model = document.getElementById('model'),
             color = document.getElementById('color'),
             year = document.getElementById('year'),
             price = document.getElementById('price');
 
         // Validate
-        if (id.value.length === 0 || brand.value.length === 0 || model.value.length === 0 || color.value.length === 0 || year.value.length === 0 || !parseInt(price.value)) return;
+        if (brand.value.length === 0 || model.value.length === 0 || color.value.length === 0 || year.value.length === 0 || !parseInt(price.value)) return;
 
         var car = {
-            id: id.value,
             brand: brand.value,
             model: model.value,
             color: color.value,
@@ -47,7 +45,6 @@ window.onload = function () {
         };
 
         // Clean data
-        id.value ='';
         brand.value = '';
         model.value = '';
         color.value = '';
@@ -87,7 +84,6 @@ window.onload = function () {
 
         cars.forEach(function (x, i) {
             var tr = document.createElement('tr'),
-                tdId = document.createElement('td'),
                 tdBrand = document.createElement('td'),
                 tdModel = document.createElement('td'),
                 tdColor = document.createElement('td'),
@@ -101,8 +97,6 @@ window.onload = function () {
                 currency: 'USD'
             })
 
-
-            tdId.innerHTML = x.id;
             tdBrand.innerHTML = x.brand;
             tdModel.innerHTML = x.model;
             tdColor.innerHTML = x.color;
@@ -119,7 +113,6 @@ window.onload = function () {
 
             tdRemove.appendChild(btnRemove);
 
-            tr.appendChild(tdId);
             tr.appendChild(tdBrand);
             tr.appendChild(tdModel);
             tr.appendChild(tdColor);

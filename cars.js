@@ -2,24 +2,24 @@ const cars = [
     {
         id: 1,
         brand: 'Toyota',
-        color: 'Rav-4',
-        email: 'red',
+        model: 'Rav-4',
+        color: 'red',
         year: '2020',
         price: '500000'
     },
     {
         id: 2,
         brand: 'KIA',
-        color: 'Seltos',
-        email: 'white',
+        model: 'Seltos',
+        color: 'white',
         year: '2020',
         price: '346500'
     },
     {
         id: 3,
         brand: 'Peigeot',
-        color: '301',
-        email: 'blue',
+        model: '301',
+        color: 'blue',
         year: '2020',
         price: '327900'
     },
