@@ -1,5 +1,4 @@
-const preLoadedCars = () => {
-    return [
+const preLoadedCars = [
         {
             id: 1,
             brand: 'Toyota',
@@ -24,6 +23,5 @@ const preLoadedCars = () => {
             year: '2020',
             price: '327900'
         },
-    ];
-}
+];
 export default preLoadedCars;
