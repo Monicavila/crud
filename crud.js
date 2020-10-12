@@ -1,36 +1,39 @@
 import preLoadedCars from './cars.js';
 
+////VARIABLES
+var editingCar = {}; //Object with edited values
+
 /*First access local storage and load local storage data if is available
-If not available write the data from the cars.js array (get item = null)
+If not available write the data from the cars.js array (get item = null or ! not exist)
 Last write data in local storage*/
 
-////MANAGE STORAGE AND DISPLAY HTML
-//Check content in localStorage
-const loadCarsFromLocalStorage = () => {
-    return JSON.parse(localStorage.getItem ('carsLabel'));
-};
-//Repeat the action save at localStorage
-const saveCarsInStorage = () => {
-    const arrayCars = preLoadedCars;
-    localStorage.setItem('carsLabel', JSON.stringify(arrayCars, null, 2));
-    return loadCarsFromLocalStorage();
-};
-//From Array preLoadedCars and set at localStorage
-const loadArrayCarList = () => {
-    if (!localStorage.getItem('carsLabel')) {
-        saveCarsInStorage();
+function loadCarsList() {
+    var carList = [],
+        storedList = localStorage.getItem('carsLabel');
+    
+    if (storedList !== null) {
+        carList = JSON.parse(storedList);
     }
-    return loadCarsFromLocalStorage();
-};
+    else if (!storedList) {
+        carList = preLoadedCars;
+    }
+    return carList;
+}
+
+function saveLocalStorageCarsList() {
+    const arrayCars = preLoadedCars;
+    localStorage.setItem('carsLabel', JSON.stringify(arrayCars));
+}
+
 //Display in screens
-function pritnCarsToScreen() {   
+function printCarsToScreen() {   
     const displayCarList = (carsToPrint) => {
-        const carList = document.getElementById('list');
+        const tBody = document.getElementById('list');
         const formatterDolar = new Intl.NumberFormat('en-US', {
             style: 'currency',
             currency: 'USD'
         });
-        if (carList) {
+        if (tBody) {
             let rows = '';
              carsToPrint.forEach( car => {
                 rows += `<tr>
@@ -39,21 +42,22 @@ function pritnCarsToScreen() {
                             <th>${car.color}</th>
                             <th>${car.year}</th>
                             <th>${formatterDolar.format(car.price)}</th>
-                            <th>
-                            <button onclick="removeCar(${car.id})" class="btn btn-danger">Delete</button>
+                            <th class="text-center">
+                            <i onclick="editCar(${car.id})" class="fas fa-edit" style="cursor:pointer; color: #307DF6" name="hand"></i>
                             </th>
-                            <th>
-                            <button onclick="editCar(${car.id})" class="btn btn-warning">Edit</button>
+                            <th class="text-center">
+                            <i onclick="removeCar(${car.id})" class="fas fa-trash-alt" style="cursor:pointer; color: red" name="hand"></i>
                             </th>
                         </tr>`;
             });
-            carList.innerHTML = rows;
+            tBody.innerHTML = rows;
         }
     };
-    let cars = loadArrayCarList ();
+    let cars = loadCarsList();
     displayCarList(cars);
 };
-//Assign an id to a new Car
+
+////ASSIGN an ID to a new Car
 function assignId() {
     let id;
     let arrayLenght = preLoadedCars.length;
@@ -67,7 +71,7 @@ function assignId() {
 };
 
 //// ADD A NEW CAR
-document.querySelector('#btn-add').addEventListener('click', function addCarToPreList() {
+document.querySelector('#btn-add').addEventListener('click', function addCarToList() {
     const brand = document.getElementById('brand'); //position const in DOM
     const brandValue = brand.value; //save value in new const
     brand.value = ''; //clear data
@@ -96,13 +100,14 @@ document.querySelector('#btn-add').addEventListener('click', function addCarToPr
     //Add new car to array cars (PreList)
     preLoadedCars.push(carToAdd);
     //Add new car to locaStorge
-    saveCarsInStorage();
+    saveLocalStorageCarsList();
     //Add new car to inner.HTML
-    pritnCarsToScreen();
+    printCarsToScreen();
 
 });
 
-////DELETE A CAR IN THE AEAY
+////DELETE A CAR IN THE ARRAY
+/// Splice Cars array
 function removeCar(id) {
     
     //Pop-op an advice to confirm delete action
@@ -112,16 +117,14 @@ function removeCar(id) {
         preLoadedCars.splice(index, 1);
     }
     //Delete car in the locaStorge
-    saveCarsInStorage();
+    saveLocalStorageCarsList();
     //Delete car at inner.HTML
-    pritnCarsToScreen();
+    printCarsToScreen();
 };
 
 ////EDIT A CAR
-let editingCar = {}; //Object with edited values
 //Get values as a result of edit a car in the list
 function editCar(idToEdit) {
-
     //Active and desactive buttons Save vs Add
     var y = document.getElementById('btn-add');
     if (y.style.display === 'block') {
@@ -132,20 +135,16 @@ function editCar(idToEdit) {
     x.style.display = 'block';
     } 
     //Identify the car is editing
-    const editingCar = preLoadedCars.find((car) => car.id === idToEdit);
+    editingCar = loadCarsList().find((car) => car.id === idToEdit);
     document.getElementById('brand').value = editingCar.brand;
     document.getElementById('model').value = editingCar.model;
     document.getElementById('color').value = editingCar.color;
     document.getElementById('year').value = editingCar.year;
     document.getElementById('price').value = editingCar.price;
-
-    //Edit values in the locaStorge
-    saveCarsInStorage();
-    //Edit values at inner.HTML
-    pritnCarsToScreen();
+    
 };
 //Save chages in edit car function
-document.querySelector('#btn-save').addEventListener('click', function saveEditedCar() {
+document.querySelector('#btn-save').addEventListener('click', function () {
     
     //Active and desactive buttons Add vs Save
     var y = document.getElementById('btn-add');
@@ -179,11 +178,12 @@ document.querySelector('#btn-save').addEventListener('click', function saveEdite
     editedPrice.value = '';
     
     //Save update values in the locaStorge
-    saveCarsInStorage();
+    saveLocalStorageCarsList();
     //Save update values at inner.HTML
-    pritnCarsToScreen();
+    printCarsToScreen();
 
 });
-pritnCarsToScreen(); // ALWAYS AFTER ALL THE FUNCTIONS
+
+printCarsToScreen(); // ALWAYS AFTER ALL THE FUNCTIONS
 window.removeCar = removeCar;
 window.editCar = editCar;
